@@ -19,6 +19,33 @@ namespace Web_project.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -38,6 +65,95 @@ namespace Web_project.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -61,6 +177,30 @@ namespace Web_project.Migrations
                     b.ToTable("AppUserClaims");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -79,6 +219,30 @@ namespace Web_project.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("AppUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -106,6 +270,21 @@ namespace Web_project.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -124,6 +303,27 @@ namespace Web_project.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("AppUserTokens");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Web_project.Entity.AppRole", b =>
@@ -154,7 +354,7 @@ namespace Web_project.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "3ffb5434-e94d-45bf-b4a6-a96f0f4b2c70",
+                            ConcurrencyStamp = "05183792-205d-4eee-93bb-e4eb4a8798e2",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -162,7 +362,7 @@ namespace Web_project.Migrations
                         new
                         {
                             Id = new Guid("bf60bd9d-6c87-406b-b75e-8bcf13d1f2e8"),
-                            ConcurrencyStamp = "d7f93d3a-4b9c-4ad8-8171-f0968bad8ce0",
+                            ConcurrencyStamp = "03fde1d9-851f-40a9-9cc8-1953f352453b",
                             Description = "staff role",
                             Name = "staff",
                             NormalizedName = "staff"
@@ -239,7 +439,7 @@ namespace Web_project.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ce2cf421-6f68-4855-8567-7987ad3154a7",
+                            ConcurrencyStamp = "15b3176f-4464-4ca7-93bc-9d882e7ed4ca",
                             Dob = new DateTime(2021, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
@@ -248,7 +448,7 @@ namespace Web_project.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDY5IyXj7INF8SZf0vdSaS8qsVHcsY2YIasTxsuAiIjOVjUe8+AnK1lWIICrImdiDw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENcgkHR5eV6MTGQab/pEEp2oCTNKLd0YsuzbECkuhxcCWkF1D55BopSmK9hbmiUlqw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -258,7 +458,7 @@ namespace Web_project.Migrations
                         {
                             Id = new Guid("d8128f3a-e0c7-4355-b0b4-40d339d9db55"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "13d0a500-7eab-47fd-ab2a-f762f4512a04",
+                            ConcurrencyStamp = "f4229ff6-861d-4658-9310-a4b1b4187552",
                             Dob = new DateTime(2021, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "staff@gmail.com",
                             EmailConfirmed = true,
@@ -267,7 +467,7 @@ namespace Web_project.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "staff@gmail.com",
                             NormalizedUserName = "staff",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJMyKJeymDBesW/FNa9q5WTxUJ062t1ZRLJFqTogBQ1bzwSI3Jhld/3wPOUvHY89Dw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAzWWtXUg5dBOBQmxopIeQvQ4bCQ/pzfKBPYRg02+PphrV25UBT+tto/BvJ1mTVWnA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -288,13 +488,10 @@ namespace Web_project.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -467,7 +664,7 @@ namespace Web_project.Migrations
                             ProductId = 1,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(4462),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 723, DateTimeKind.Local).AddTicks(5374),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName1",
                             ProductPrice = 11,
@@ -479,7 +676,7 @@ namespace Web_project.Migrations
                             ProductId = 2,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7925),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2789),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName2",
                             ProductPrice = 11,
@@ -491,7 +688,7 @@ namespace Web_project.Migrations
                             ProductId = 3,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7937),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2803),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName3",
                             ProductPrice = 11,
@@ -503,7 +700,7 @@ namespace Web_project.Migrations
                             ProductId = 4,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7939),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2806),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName4",
                             ProductPrice = 11,
@@ -515,7 +712,7 @@ namespace Web_project.Migrations
                             ProductId = 5,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7941),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2808),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName5",
                             ProductPrice = 11,
@@ -527,7 +724,7 @@ namespace Web_project.Migrations
                             ProductId = 6,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7942),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2809),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName6",
                             ProductPrice = 11,
@@ -539,7 +736,7 @@ namespace Web_project.Migrations
                             ProductId = 7,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7944),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2811),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName7",
                             ProductPrice = 11,
@@ -551,7 +748,7 @@ namespace Web_project.Migrations
                             ProductId = 8,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7945),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2812),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName8",
                             ProductPrice = 11,
@@ -563,7 +760,7 @@ namespace Web_project.Migrations
                             ProductId = 9,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7947),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2814),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName9",
                             ProductPrice = 11,
@@ -575,13 +772,64 @@ namespace Web_project.Migrations
                             ProductId = 10,
                             ProductBrand = "ProductBrand",
                             ProductColor = "ProductColor",
-                            ProductDateUpload = new DateTime(2021, 8, 14, 4, 10, 44, 212, DateTimeKind.Local).AddTicks(7948),
+                            ProductDateUpload = new DateTime(2021, 8, 14, 5, 13, 54, 724, DateTimeKind.Local).AddTicks(2815),
                             ProductDecription = "ProductDecription",
                             ProductName = "ProductName10",
                             ProductPrice = 11,
                             ProductProductCode = "ProductProductCode",
                             ProductSize = "ProductSize"
                         });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Web_project.Entity.Cart", b =>

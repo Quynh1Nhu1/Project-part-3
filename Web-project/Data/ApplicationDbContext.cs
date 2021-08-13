@@ -11,7 +11,7 @@ using Web_project.Entity;
 
 namespace Web_project.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUsers, AppRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -39,6 +39,7 @@ namespace Web_project.Data
 
             builder.ApplyConfiguration(new ProductsConfigurations());
             builder.ApplyConfiguration(new ProductInCategoryConfiguration());
+
             builder.ApplyConfiguration(new AppUserConfiguration());
             builder.ApplyConfiguration(new AppRoleConfiguration());
 
@@ -50,7 +51,7 @@ namespace Web_project.Data
             builder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
 
             builder.Seed();
-            //base.OnModelCreating(builder);
+            base.OnModelCreating(builder);
         }
 
 
