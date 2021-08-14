@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Web_project.Entity
 {
-    public class AppUsers : IdentityUser<Guid>
+    public class AppUsers : IdentityUser
     {
         public string FirstName { get; set; }
 

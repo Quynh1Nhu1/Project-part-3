@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Web_project.Configurations;
+using Web_project.DataSeeding;
 using Web_project.Entity;
 
 namespace Web_project.Data
@@ -14,9 +17,15 @@ namespace Web_project.Data
             : base(options)
         {
         }
+
+        public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => {
+            builder
+                // .AddFilter (DbLoggerCategory.Database.Command.Name, LogLevel.Warning)
+                // .AddFilter (DbLoggerCategory.Query.Name, LogLevel.Debug)
+                .AddConsole();
+        });
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             base.OnModelCreating(builder);
             // Bỏ tiền tố AspNet của các bảng: mặc định các bảng trong IdentityDbContext có
             // tên với tiền tố AspNet như: AspNetUserRoles, AspNetUser ...
@@ -31,12 +40,26 @@ namespace Web_project.Data
             }
 
 
+
             builder.ApplyConfiguration(new AppRoleConfigurations());
             builder.ApplyConfiguration(new AppUsersConfigurations());
 
             builder.ApplyConfiguration(new CategoriesConfigurations());
             builder.ApplyConfiguration(new ProductInCategoriesConfigurations());
             builder.ApplyConfiguration(new ProductsConfigurations());
+
+
+
+
+            builder.Seed();
+           
+
+
+
+
+
+
+
 
 
 

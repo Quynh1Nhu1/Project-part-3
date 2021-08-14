@@ -28,6 +28,10 @@ namespace Web_project.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -44,6 +48,8 @@ namespace Web_project.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -80,6 +86,10 @@ namespace Web_project.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -133,6 +143,8 @@ namespace Web_project.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -219,97 +231,6 @@ namespace Web_project.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("Web_project.Entity.AppRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppRoles");
-                });
-
-            modelBuilder.Entity("Web_project.Entity.AppUsers", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Dob")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppUsers");
-                });
-
             modelBuilder.Entity("Web_project.Entity.Cart", b =>
                 {
                     b.Property<int>("Id")
@@ -317,8 +238,8 @@ namespace Web_project.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -365,6 +286,32 @@ namespace Web_project.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoriesName = "CategoryName1",
+                            CategoriesSex = "woman",
+                            CategoriesType = "CategoryType",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoriesName = "CategoryName2",
+                            CategoriesSex = "man",
+                            CategoriesType = "CategoryType",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoriesName = "CategoryName3",
+                            CategoriesSex = "bede",
+                            CategoriesType = "CategoryType",
+                            SortOrder = 1
+                        });
                 });
 
             modelBuilder.Entity("Web_project.Entity.ProductInCategories", b =>
@@ -380,6 +327,58 @@ namespace Web_project.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductInCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 3
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 4
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            ProductId = 5
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            ProductId = 6
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 7
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 8
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 9
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 10
+                        });
                 });
 
             modelBuilder.Entity("Web_project.Entity.Products", b =>
@@ -416,6 +415,160 @@ namespace Web_project.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductId = 1,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 909, DateTimeKind.Local).AddTicks(9823),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName1",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 2,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8615),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName2",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 3,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8633),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName3",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 4,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8636),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName4",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 5,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8637),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName5",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 6,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8639),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName6",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 7,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8640),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName7",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 8,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8644),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName8",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 9,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8645),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName9",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        },
+                        new
+                        {
+                            ProductId = 10,
+                            ProductBrand = "ProductBrand",
+                            ProductColor = "ProductColor",
+                            ProductDateUpload = new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8647),
+                            ProductDecription = "ProductDecription",
+                            ProductName = "ProductName10",
+                            ProductPrice = 11,
+                            ProductProductCode = "ProductProductCode",
+                            ProductSize = "ProductSize"
+                        });
+                });
+
+            modelBuilder.Entity("Web_project.Entity.AppRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasDiscriminator().HasValue("AppRole");
+                });
+
+            modelBuilder.Entity("Web_project.Entity.AppUsers", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasDiscriminator().HasValue("AppUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

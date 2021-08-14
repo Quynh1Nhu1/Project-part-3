@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Web_project.Entity
 {
-    public class AppRole : IdentityRole<Guid>
+    public class AppRole : IdentityRole
     {
         public string Description { get; set; }
     }

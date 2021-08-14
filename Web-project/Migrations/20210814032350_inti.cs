@@ -8,49 +8,6 @@ namespace Web_project.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppRoles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppUsers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -91,6 +48,8 @@ namespace Web_project.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -105,6 +64,10 @@ namespace Web_project.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Dob = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -123,35 +86,6 @@ namespace Web_project.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cart", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cart_AppUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AppUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Cart_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,6 +131,35 @@ namespace Web_project.Migrations
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cart_Users_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -284,6 +247,50 @@ namespace Web_project.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CategoriesName", "CategoriesSex", "CategoriesType", "SortOrder" },
+                values: new object[,]
+                {
+                    { 1, "CategoryName1", "woman", "CategoryType", 1 },
+                    { 2, "CategoryName2", "man", "CategoryType", 1 },
+                    { 3, "CategoryName3", "bede", "CategoryType", 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "ProductBrand", "ProductColor", "ProductDateUpload", "ProductDecription", "ProductName", "ProductPrice", "ProductProductCode", "ProductSize" },
+                values: new object[,]
+                {
+                    { 1, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 909, DateTimeKind.Local).AddTicks(9823), "ProductDecription", "ProductName1", 11, "ProductProductCode", "ProductSize" },
+                    { 2, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8615), "ProductDecription", "ProductName2", 11, "ProductProductCode", "ProductSize" },
+                    { 3, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8633), "ProductDecription", "ProductName3", 11, "ProductProductCode", "ProductSize" },
+                    { 4, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8636), "ProductDecription", "ProductName4", 11, "ProductProductCode", "ProductSize" },
+                    { 5, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8637), "ProductDecription", "ProductName5", 11, "ProductProductCode", "ProductSize" },
+                    { 6, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8639), "ProductDecription", "ProductName6", 11, "ProductProductCode", "ProductSize" },
+                    { 7, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8640), "ProductDecription", "ProductName7", 11, "ProductProductCode", "ProductSize" },
+                    { 8, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8644), "ProductDecription", "ProductName8", 11, "ProductProductCode", "ProductSize" },
+                    { 9, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8645), "ProductDecription", "ProductName9", 11, "ProductProductCode", "ProductSize" },
+                    { 10, "ProductBrand", "ProductColor", new DateTime(2021, 8, 14, 10, 23, 49, 910, DateTimeKind.Local).AddTicks(8647), "ProductDecription", "ProductName10", 11, "ProductProductCode", "ProductSize" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductInCategories",
+                columns: new[] { "CategoryId", "ProductId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 1, 4 },
+                    { 2, 5 },
+                    { 3, 6 },
+                    { 1, 7 },
+                    { 1, 8 },
+                    { 1, 9 },
+                    { 1, 10 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Cart_AppUserId",
                 table: "Cart",
@@ -342,9 +349,6 @@ namespace Web_project.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AppRoles");
-
-            migrationBuilder.DropTable(
                 name: "Cart");
 
             migrationBuilder.DropTable(
@@ -364,9 +368,6 @@ namespace Web_project.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTokens");
-
-            migrationBuilder.DropTable(
-                name: "AppUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

@@ -8,7 +8,6 @@ namespace Web_project.Entity
     public class Products
     {
         public int ProductId { get; set; }
-
         public string ProductName { get; set; }
         public string ProductDecription { get; set; }
         public int ProductPrice { get; set; }
