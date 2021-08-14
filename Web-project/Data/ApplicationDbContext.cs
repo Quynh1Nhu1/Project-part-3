@@ -29,15 +29,28 @@ namespace Web_project.Data
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
-            builder.ApplyConfiguration(new UserrConfigurations());
-         
+
+
+            builder.ApplyConfiguration(new AppRoleConfigurations());
+            builder.ApplyConfiguration(new AppUsersConfigurations());
+
+            builder.ApplyConfiguration(new CategoriesConfigurations());
+            builder.ApplyConfiguration(new ProductInCategoriesConfigurations());
+            builder.ApplyConfiguration(new ProductsConfigurations());
+
 
 
 
 
 
         }
-        public DbSet<Userr> Userr { set; get; }
+        public DbSet<AppRole> AppRole { set; get; }
+        public DbSet<AppUsers> AppUsers { set; get; }
+        public DbSet<Cart> Cart { set; get; }
+        public DbSet<Categories> Categories { set; get; }
+        public DbSet<ProductInCategories> ProductInCategories { set; get; }
+        public DbSet<Products> Products { set; get; }
+
 
     }
 

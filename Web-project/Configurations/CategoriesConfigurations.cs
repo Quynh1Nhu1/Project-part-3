@@ -8,17 +8,14 @@ using Web_project.Entity;
 
 namespace Web_project.Configurations
 {
-    public class UserrConfigurations : IEntityTypeConfiguration<Userr>
+    public class CategoriesConfigurations : IEntityTypeConfiguration<Categories>
     {
-
-
-        public void Configure(EntityTypeBuilder<Userr> builder)
+        public void Configure(EntityTypeBuilder<Categories> builder)
         {
-            builder.HasKey(t => new { t.UserId });
-
-          
+            builder.ToTable("Categories");
+            builder.Property(x => x.CategoriesName).IsRequired().HasMaxLength(200);
+            
 
         }
-
     }
 }
